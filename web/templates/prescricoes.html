@@ -1,0 +1,58 @@
+<html lang="pt">
+	<head>
+		<meta charset="utf-8">
+        <title>Odisseia</title>
+        <style>
+			html {
+				font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+			}
+            table, th, td {
+              border: 1px solid black;
+              border-collapse: collapse;
+            }
+        </style>
+	</head>
+	<body>
+        <form method="POST" action="prescricoes">
+            <input type="text" id="num_cedula" name="num_cedula" placeholder="Número de Cédula"/><br>
+            <input type="text" id="num_doente" name="num_doente" placeholder="Número de Doente"/><br>
+			<input type="text" id="data_consulta" name="data_consulta" placeholder="Data da Consulta"/><br>
+            <input type="text" id="substancia" name="substancia" placeholder="Substância"/><br>
+            <input type="text" id="quant" name="quant" placeholder="Quantidade"/><br>
+            <input type="submit" value="Adicionar"/>
+		</form>
+        {% if cursor %}
+		  
+		<table style="width:70%">
+		  <thead>
+			<tr>
+			  <th>Número de Cédula</th>
+			  <th>Número de Doente</th>
+              <th>Data da Consulta</th>
+			  <th>Substância</th>
+			  <th>Quantidade</th>
+			  <th>Editar</th>
+			  <th>Remover</th>
+			</tr>
+		  </thead>
+		  <tbody>      
+			{% for record in cursor %}
+			  <tr>
+				<td>{{ record[0] }}</td>
+				<td>{{ record[1] }}</td>
+                <td>{{ record[2] }}</td>
+				<td>{{ record[3] }}</td>
+				<td>{{ record[4] }}</td>
+				<td><a href="editar_prescricao?num_cedula={{ record[0] }}&num_doente={{ record[1] }}&data_consulta={{ record[2] }}&substancia={{ record[3] }}">Editar</a></td>
+				<td><a href="apagar_prescricao?num_cedula={{ record[0] }}&num_doente={{ record[1] }}&data_consulta={{ record[2] }}&substancia={{ record[3] }}">Apagar</a></td>
+			  </tr>
+			{% endfor %}
+		  </tbody>
+		</table>
+	  {% else %}
+		<p> Error: failed to retreive data from database!</p>
+	  {% endif %}
+	  <br>
+	  <a href="index">Pagina inicial</a>
+	</body>
+</html>

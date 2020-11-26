@@ -1,0 +1,71 @@
+<html lang="pt">
+	<head>
+		<meta charset="utf-8">
+        <title>Odisseia</title>
+        <style>
+			html {
+				font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+			}
+            table, th, td {
+              border: 1px solid black;
+              border-collapse: collapse;
+            }
+        </style>
+	</head>
+	<body>
+        {% if max %}
+		  
+		<table style="width:70%">
+		  <thead>
+			<tr>
+              <th>Concelho</th>
+              <th>Valor de glicemia máximo</th>
+			  <th>Doente</th>
+			</tr>
+		  </thead>
+		  <tbody>      
+			{% for record in max %}
+				<tr>
+					<td>{{ record[0] }}</td>
+					<td>{{ record[1] }}</td>
+					{% if not record[2] %}
+						<td>Sem registo de doente</td>
+					{% else %}
+						<td>{{ record[2] }}</td>
+				{% endif %}			  
+				</tr>
+			{% endfor %}
+		  </tbody>
+		</table>
+		<br>
+		{% endif %}
+		{% if min %}
+
+		<table style="width:70%">
+			<thead>
+			  <tr>
+				<th>Concelho</th>
+				<th>Valor de glicemia mínimo</th>
+				<th>Doente</th>
+			  </tr>
+			</thead>
+			<tbody>      
+			  {% for record in min %}
+				<tr>
+				  	<td>{{ record[0] }}</td>
+				  	<td>{{ record[1] }}</td>
+				  	{% if not record[2] %}
+						<td>Sem registo de doente</td>
+					{% else %}
+				  		<td>{{ record[2] }}</td>
+				  	{% endif %}
+				</tr>
+			  {% endfor %}
+			</tbody>
+		  </table>
+		  {% endif %}
+
+	  <br>
+	  <a href="index">Pagina inicial</a>
+	</body>
+</html>

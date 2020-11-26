@@ -1,0 +1,37 @@
+<html lang="pt">
+	<head>
+		<meta charset="utf-8">
+        <title>Odisseia</title>
+        <style>
+			html {
+				font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+			}
+            table, th, td {
+              border: 1px solid black;
+              border-collapse: collapse;
+            }
+        </style>
+	</head>
+	<body>
+		<h1>Aviar prescricao </h1>
+		{% if cursor %}
+			{% for record in cursor %}
+			<form method="POST" action="venda_prescricao_form">
+				<input type="hidden" id="num_cedula" name="num_cedula" value="{{ record[0] }}"/><br>
+				<input type="hidden" id="num_doente" name="num_doente" value="{{ record[1] }}"/><br>
+				<input type="hidden" id="data_consulta" name="data_consulta" value="{{ record[2] }}"/><br>
+				<input type="hidden" id="substancia" name="substancia" value="{{ record[3] }}"/><br>
+				<input type="hidden" id="quant" name="quant" value="{{record[4]}}"/><br>
+				<input type="text" id="num_venda" name="num_venda" placeholder="Número da venda"/><br>
+				<input type="text" id="inst" name="inst" placeholder="Instituição"/><br>
+				<input type="text" id="preco" name="preco" placeholder="Preço"/><br>
+				<input type="submit" value="Adicionar"/>
+			</form>
+			{% endfor %}
+		{% else %}
+			<p> Error: failed to retrieve data from database!</p>
+		{% endif %}
+		  
+	  <a href="venda_prescricao">Voltar</a>
+	</body>
+</html>

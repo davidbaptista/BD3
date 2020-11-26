@@ -1,0 +1,44 @@
+<html lang="pt">
+	<head>
+		<meta charset="utf-8">
+        <title>Odisseia</title>
+        <style>
+			html {
+				font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+			}
+            table, th, td {
+              border: 1px solid black;
+              border-collapse: collapse;
+            }
+        </style>
+	</head>
+	<body>
+		<h1>Introduza o médico e a data das prescrições que pretende listar</h1>
+			<form method="POST" action="listar_substancias">
+				<input type="text" id="medico" name="medico" placeholder="Número da cédula do médico"/><br>
+				<input type="text" id="mes" name="mes" placeholder="Mes"/><br>
+				<input type="text" id="ano" name="ano" placeholder="Ano"/><br>
+				<input type="submit" value="Selecionar"/>
+            </form>
+				  
+            
+		{% if cursor %}
+		<table style="width:70%">
+		  <thead>
+			<tr>
+			  <th>Substância</th>
+			</tr>
+		  </thead>
+		  <tbody>      
+			{% for record in cursor %}
+			  <tr>
+				<td>{{ record[1] }}</td>
+			  </tr>
+			{% endfor %}
+		  </tbody>
+		</table>
+		{% endif %}
+	  <br>
+	  <a href="index">Voltar</a>
+	</body>
+</html>

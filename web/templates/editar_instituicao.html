@@ -1,0 +1,68 @@
+<html lang="pt">
+	<head>
+		<meta charset="utf-8">
+        <title>Odisseia</title>
+        <style>
+			html {
+				font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+			}
+            table, th, td {
+              border: 1px solid black;
+              border-collapse: collapse;
+            }
+        </style>
+	</head>
+	<body>
+		{% if cursor %}
+			{% for record in cursor %}
+				<h1>Editar Instituição {{ record[0] }}</h1>
+				<form method="POST" action="editar_instituicao">
+					<input type="hidden" id="nome_old" name="nome_old" value="{{ record[0] }}"/><br>
+					<input type="text" id="nome" name="nome" value="{{ record[0] }}"/><br>
+					<select name="tipo" id="tipo">
+						{% if record[1] == 'farmacia' %}
+							<option value="farmacia" selected="selected">Farmácia</option>
+							<option value="laboratorio">Laboratório</option>
+							<option value="hospital">Hospital</option>
+							<option value="clinica">Clínica</option>
+						{% elif record[1] == 'laboratorio' %}
+							<option value="farmacia">Farmácia</option>
+							<option value="laboratorio" selected="selected">Laboratório</option>
+							<option value="hospital">Hospital</option>
+							<option value="clinica">Clínica</option>
+						{% elif record[1] == 'hospital' %}
+							<option value="farmacia">Farmácia</option>
+							<option value="laboratorio" >Laboratório</option>
+							<option value="hospital" selected="selected">Hospital</option>
+							<option value="clinica">Clínica</option>
+						{% else %}
+							<option value="farmacia">Farmácia</option>
+							<option value="laboratorio" >Laboratório</option>
+							<option value="hospital">Hospital</option>
+							<option value="clinica" selected="selected">Clínica</option>
+						{% endif %}
+					</select>	
+					<br>				
+					{% if concelhos %}
+						<label for="num_regiao_concelho">Concelho:</label>
+						<select name="num_regiao_concelho" id="num_regiao_concelho">
+							{% for concelho in concelhos %}
+								{% if concelho[0] == record[3] %}
+									<option value="{{ concelho[1] }}_{{ concelho[0] }}" selected="selected">{{concelho[2]}}</option>
+								{% else %}
+									<option value="{{ concelho[1] }}_{{ concelho[0] }}">{{concelho[2]}}</option>
+								{% endif %}
+							{% endfor %}
+						</select>
+					{% endif %}
+					<br>
+					<input type="submit" value="Editar"/>
+				</form>
+			{% endfor %}
+	  	{% else %}
+			<p> Error: failed to retreive data from database!</p>
+		{% endif %}
+	  <br>
+	  <a href="instituicoes">Voltar</a>
+	</body>
+</html>
