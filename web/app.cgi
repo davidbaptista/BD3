@@ -264,17 +264,29 @@ def analises():
 		cursor = dbConn.cursor(cursor_factory = psycopg2.extras.DictCursor)
 	
 		if request.method == 'POST':
-			if request.form['num_cedula'] == '' or request.form['num_doente'] == '' or request.form['data_consulta'] == '':
-				query = "INSERT INTO analise(num_analise, especialidade, data_registo, nome, quant, inst ) VALUES(%s, %s, %s, %s ,%s, %s);"
-				data = (request.form["num_analise"], request.form["especialidade"], request.form["data_registo"], request.form["nome"], request.form["quant"], request.form["inst"])
+			items = request.form['consulta'].split('_')
+			num_cedula = items[0]
+			num_doente = items[1]
+			data_consulta = items[2]
+			if num_cedula == '' or num_doente == '' or data_consulta == '':
+				query = "INSERT INTO analise(num_analise, especialidade, data_registo, nome, quant, inst ) VALUES(%s, %s, current_date, %s ,%s, %s);"
+				data = (request.form["num_analise"], request.form["especialidade"],  request.form["nome"], request.form["quant"], request.form["inst"])
 			else:
-				query = "INSERT INTO analise(num_analise, especialidade, num_cedula, num_doente, data_consulta, data_registo, nome, quant, inst ) VALUES(%s, %s, %s, %s, %s, %s, %s ,%s, %s);"
-				data = (request.form["num_analise"], request.form["especialidade"], request.form["num_cedula"], request.form["num_doente"], request.form["data_consulta"], request.form["data_registo"], request.form["nome"], request.form["quant"], request.form["inst"])
+				query = "INSERT INTO analise(num_analise, especialidade, num_cedula, num_doente, data_consulta, data_registo, nome, quant, inst ) VALUES(%s, %s, %s, %s, %s, current_date, %s ,%s, %s);"
+				data = (request.form["num_analise"], request.form["especialidade"], num_cedula, num_doente, data_consulta, request.form["nome"], request.form["quant"], request.form["inst"])
 			cursor.execute(query, data)
-			
+
+		query = "SELECT num_cedula, num_doente, data_consulta FROM consulta;"
+		cursor.execute(query)
+		consultas = cursor.fetchall()
+
+		query = "SELECT nome FROM instituicao;"
+		cursor.execute(query)
+		instituicoes = cursor.fetchall()
+
 		query = "SELECT * FROM analise ORDER BY num_analise;"
 		cursor.execute(query)
-		return render_template('analises.html', cursor=cursor)
+		return render_template('analises.html', cursor=cursor, consultas=consultas, instituicoes=instituicoes)
 	except Exception as e:
 		return str(e)
 	finally:
@@ -433,11 +445,11 @@ def listar_glicemia():
 		dbConn = psycopg2.connect(DB_CONNECTION_STRING)
 		cursor = dbConn.cursor(cursor_factory = psycopg2.extras.DictCursor)
 
-		query = "SELECT * FROM (SELECT c.nome, a.num_doente, max(quant) glicemia FROM analise a JOIN instituicao i ON a.inst=i.nome JOIN concelho c ON i.num_concelho = c.num_concelho WHERE a.nome = 'glicemia' OR a.nome = 'Glicemia' GROUP BY a.num_doente, c.nome) a1 NATURAL JOIN (SELECT DISTINCT c.nome, max(quant) glicemia FROM analise a JOIN instituicao i ON a.inst=i.nome JOIN concelho c ON i.num_concelho = c.num_concelho WHERE a.nome = 'glicemia' OR a.nome = 'Glicemia' GROUP BY c.nome) a2;"
+		query = "SELECT * FROM (SELECT c.nome, a.num_doente, max(quant) glicemia FROM analise a JOIN instituicao i ON a.inst=i.nome JOIN concelho c ON i.num_concelho = c.num_concelho WHERE a.nome = 'glicemia' OR a.nome = 'Glicemia' GROUP BY a.num_doente, c.nome) a1 NATURAL JOIN (SELECT DISTINCT c.nome, max(quant) glicemia FROM analise a JOIN instituicao i ON a.inst=i.nome JOIN concelho c ON i.num_concelho = c.num_concelho WHERE a.nome = 'glicemia' OR a.nome = 'Glicemia' GROUP BY c.nome) a2 ORDER BY nome;"
 		cursor.execute(query)
 		glicemia_max = cursor.fetchall()
 
-		query = "SELECT * FROM (SELECT c.nome, a.num_doente, min(quant) glicemia FROM analise a JOIN instituicao i ON a.inst=i.nome JOIN concelho c ON i.num_concelho = c.num_concelho WHERE a.nome = 'glicemia' OR a.nome = 'Glicemia' GROUP BY a.num_doente, c.nome) a1 NATURAL JOIN (SELECT DISTINCT c.nome, min(quant) glicemia FROM analise a JOIN instituicao i ON a.inst=i.nome JOIN concelho c ON i.num_concelho = c.num_concelho WHERE a.nome = 'glicemia' OR a.nome = 'Glicemia' GROUP BY c.nome) a2;"
+		query = "SELECT * FROM (SELECT c.nome, a.num_doente, min(quant) glicemia FROM analise a JOIN instituicao i ON a.inst=i.nome JOIN concelho c ON i.num_concelho = c.num_concelho WHERE a.nome = 'glicemia' OR a.nome = 'Glicemia' GROUP BY a.num_doente, c.nome) a1 NATURAL JOIN (SELECT DISTINCT c.nome, min(quant) glicemia FROM analise a JOIN instituicao i ON a.inst=i.nome JOIN concelho c ON i.num_concelho = c.num_concelho WHERE a.nome = 'glicemia' OR a.nome = 'Glicemia' GROUP BY c.nome) a2 ORDER BY nome;"
 		cursor.execute(query)
 		glicemia_min = cursor.fetchall()
 

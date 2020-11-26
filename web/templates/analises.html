@@ -16,13 +16,27 @@
         <form method="POST" action="analises">
 			<input type="text" id="num_analise" name="num_analise" placeholder="Número da Análise"/><br>
 			<input type="text" id="especialidade" name="especialidade" placeholder="Especialidade"/><br>
-			<input type="text" id="num_cedula" name="num_cedula" placeholder="Número de Cédula"/><br>
-			<input type="text" id="num_doente" name="num_doente" placeholder="Número de Doente"/><br>
-			<input type="text" id="data_consulta" name="data_consulta" placeholder="Data consulta"/><br>
-			<input type="text" id="data_registo" name="data_registo" placeholder="Data registo"/><br>
+			{% if consultas %}
+			<label for="consulta">Consulta:</consulta>
+			<select name="consulta" id="num_regiao_concelho">
+				<option value="__" selected="selected">Sem consulta</option>
+				{% for consulta in consultas %}
+					<option value="{{ consulta[0] }}_{{ consulta[1] }}_{{ consulta[2]}}">Medico: {{consulta[0]}} Doente: {{consulta[1]}} Data: {{consulta[2]}}</option>
+				{% endfor %}
+			</select>
+			{% endif %}
+			<br>
 			<input type="text" id="nome" name="nome" placeholder="Nome"/><br>
 			<input type="text" id="quant" name="quant" placeholder="Quantidade"/><br>
-			<input type="text" id="inst" name="inst" placeholder="Instituição"/><br>
+			{% if instituicoes %}
+				<label for="inst">Consulta:</consulta>
+				<select name="inst" id="inst">
+					{% for instituicao in instituicoes %}
+						<option value="{{ instituicao[0] }}">{{instituicao[0]}}</option>
+					{% endfor %}
+				</select>
+			{% endif %}
+			<br>
             <input type="submit" value="Adicionar"/>
 		</form>
         {% if cursor %}
