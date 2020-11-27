@@ -44,7 +44,14 @@ def medicos():
 		cursor.execute(query)
 		return render_template("medicos.html", cursor=cursor)
 	except Exception as e:
-		return str(e)
+		ex = str(type(e).__name__)
+
+		if ex == 'IntegrityError':
+			return str('Verifique os dados inseridos')
+		elif ex == 'DataError':
+			return str('Tem de preencher todos os campos')
+		else:
+			return str(e)
 	finally:
 		dbConn.commit()	
 		cursor.close()
@@ -71,7 +78,14 @@ def editar_medico():
 
 			return render_template("editar_medico.html", cursor=cursor)
 	except Exception as e:
-		return str(e)
+		ex = str(type(e).__name__)
+
+		if ex == 'IntegrityError':
+			return str('Verifique os dados inseridos')
+		elif ex == 'DataError':
+			return str('Tem de preencher todos os campos')
+		else:
+			return str(e)
 	finally:
 		dbConn.commit()
 		cursor.close()
@@ -89,7 +103,14 @@ def apagar_medico():
 		cursor.execute(query, data)
 		return redirect(url_for('medicos'))
 	except Exception as e:
-		return str(e)
+		ex = str(type(e).__name__)
+
+		if ex == 'IntegrityError':
+			return str('Verifique os dados inseridos')
+		elif ex == 'DataError':
+			return str('Tem de preencher todos os campos')
+		else:
+			return str(e)
 	finally:
 		dbConn.commit()
 		cursor.close()
@@ -104,15 +125,31 @@ def prescricoes():
 		cursor = dbConn.cursor(cursor_factory = psycopg2.extras.DictCursor)
 
 		if request.method == 'POST':
+			items = request.form['consulta'].split('_')
+			num_cedula = items[0]
+			num_doente = items[1]
+			data_consulta = items[2]
+
 			query = "INSERT INTO prescricao(num_cedula, num_doente, data_consulta, substancia, quant) VALUES(%s, %s, %s, %s, %s);"
-			data = (request.form["num_cedula"], request.form["num_doente"], request.form["data_consulta"], request.form["substancia"], request.form["quant"])
+			data = (num_cedula, num_doente, data_consulta, request.form["substancia"], request.form["quant"])
 			cursor.execute(query, data)
-				
+
+		query = "SELECT num_cedula, num_doente, data_consulta FROM consulta"
+		cursor.execute(query)
+		consultas = cursor.fetchall()
+
 		query = "SELECT num_cedula, num_doente, data_consulta, substancia, quant FROM prescricao;"
 		cursor.execute(query)
-		return render_template("prescricoes.html", cursor=cursor)
+		return render_template("prescricoes.html", cursor=cursor, consultas=consultas)
 	except Exception as e:
-		return str(e)
+		ex = str(type(e).__name__)
+
+		if ex == 'IntegrityError':
+			return str('Verifique os dados inseridos')
+		elif ex == 'DataError':
+			return str('Tem de preencher todos os campos')
+		else:
+			return str(e)
 	finally:
 		dbConn.commit()	
 		cursor.close()
@@ -139,7 +176,14 @@ def editar_prescricao():
 
 			return render_template("editar_prescricao.html", cursor=cursor)
 	except Exception as e:
-		return str(e)
+		ex = str(type(e).__name__)
+
+		if ex == 'IntegrityError':
+			return str('Verifique os dados inseridos')
+		elif ex == 'DataError':
+			return str('Tem de preencher todos os campos')
+		else:
+			return str(e)
 	finally:
 		dbConn.commit()
 		cursor.close()
@@ -157,7 +201,14 @@ def apagar_prescricao():
 		cursor.execute(query, data)
 		return redirect(url_for('prescricoes'))
 	except Exception as e:
-		return str(e)
+		ex = str(type(e).__name__)
+
+		if ex == 'IntegrityError':
+			return str('Verifique os dados inseridos')
+		elif ex == 'DataError':
+			return str('Tem de preencher todos os campos')
+		else:
+			return str(e)
 	finally:
 		dbConn.commit()
 		cursor.close()
@@ -214,8 +265,8 @@ def editar_instituicao():
 			num_regiao = items[0]
 			num_concelho = items[1]
 
-			query = "UPDATE instituicao SET nome = %s, tipo = %s, num_regiao = %s , num_concelho = %s WHERE nome = %s;"
-			data = (request.form['nome'], request.form["tipo"], num_regiao, num_concelho, request.form["nome_old"])
+			query = "UPDATE instituicao SET tipo = %s, num_regiao = %s , num_concelho = %s WHERE nome = %s;"
+			data = (request.form["tipo"], num_regiao, num_concelho, request.form["nome"])
 			cursor.execute(query, data)
 
 			return redirect(url_for('instituicoes'))
@@ -229,8 +280,16 @@ def editar_instituicao():
 			cursor.execute(query, data)
 
 			return render_template("editar_instituicao.html", cursor=cursor, concelhos=concelhos)
+			
 	except Exception as e:
-		return str(e)
+		ex = str(type(e).__name__)
+
+		if ex == 'IntegrityError':
+			return str('Verifique os dados inseridos')
+		elif ex == 'DataError':
+			return str('Tem de preencher todos os campos')
+		else:
+			return str(e)
 	finally:
 		dbConn.commit()
 		cursor.close()
@@ -248,7 +307,14 @@ def apagar_instituicao():
 		cursor.execute(query, data)
 		return redirect(url_for('instituicoes'))
 	except Exception as e:
-		return str(e)
+		ex = str(type(e).__name__)
+
+		if ex == 'IntegrityError':
+			return str('Verifique os dados inseridos')
+		elif ex == 'DataError':
+			return str('Tem de preencher todos os campos')
+		else:
+			return str(e)
 	finally:
 		dbConn.commit()
 		cursor.close()
@@ -288,7 +354,14 @@ def analises():
 		cursor.execute(query)
 		return render_template('analises.html', cursor=cursor, consultas=consultas, instituicoes=instituicoes)
 	except Exception as e:
-		return str(e)
+		ex = str(type(e).__name__)
+
+		if ex == 'IntegrityError':
+			return str('Verifique os dados inseridos')
+		elif ex == 'DataError':
+			return str('Tem de preencher todos os campos')
+		else:
+			return str(e)
 	finally:
 		dbConn.commit()
 		cursor.close()
@@ -303,19 +376,44 @@ def editar_analise():
 		cursor = dbConn.cursor(cursor_factory = psycopg2.extras.DictCursor)
 
 		if request.method == 'POST':
-			query = "UPDATE analise SET especialidade = %s, num_cedula = %s, num_doente = %s, data_consulta = %s, data_registo = %s, nome = %s, quant = %s, inst = %s WHERE num_analise = %s;"
-			data = (request.form['especialidade'], request.form['num_cedula'], request.form['num_doente'], request.form['data_consulta'], request.form['data_registo'], request.form['nome'], request.form['quant'], request.form['inst'], request.form['num_analise'])
+			items = request.form['consulta'].split('_')
+			num_cedula = items[0]
+			num_doente = items[1]
+			data_consulta = items[2]
+
+			if num_cedula == '' or num_doente == '' or data_consulta == '':
+				query = "UPDATE analise SET especialidade = %s, nome = %s, quant = %s, inst = %s WHERE num_analise = %s;"
+				data = (request.form['especialidade'], request.form['nome'], request.form['quant'], request.form['inst'], request.form['num_analise'])
+			else:
+				query = "UPDATE analise SET especialidade = %s, num_cedula = %s, num_doente = %s, data_consulta = %s, nome = %s, quant = %s, inst = %s WHERE num_analise = %s;"
+				data = (request.form['especialidade'], num_cedula, num_doente, data_consulta, request.form['nome'], request.form['quant'], request.form['inst'], request.form['num_analise'])
+			
 			cursor.execute(query, data)
 
 			return redirect(url_for('analises'))
 		else:
+			query = "SELECT num_cedula, num_doente, data_consulta FROM consulta;"
+			cursor.execute(query)
+			consultas = cursor.fetchall()
+
+			query = "SELECT nome FROM instituicao;"
+			cursor.execute(query)
+			instituicoes = cursor.fetchall()
+
 			query = "SELECT * FROM analise WHERE num_analise = %s;"
 			data = (request.args.get('num_analise'),)
 			cursor.execute(query, data)
 
-			return render_template("editar_analise.html", cursor=cursor)
+			return render_template("editar_analise.html", cursor=cursor, consultas=consultas, instituicoes=instituicoes)
 	except Exception as e:
-		return str(e)
+		ex = str(type(e).__name__)
+
+		if ex == 'IntegrityError':
+			return str('Verifique os dados inseridos')
+		elif ex == 'DataError':
+			return str('Tem de preencher todos os campos')
+		else:
+			return str(e)
 	finally:
 		dbConn.commit()
 		cursor.close()
@@ -335,7 +433,14 @@ def apagar_analise():
 
 		return redirect(url_for('analises'))
 	except Exception as e:
-		return str(e)
+		ex = str(type(e).__name__)
+
+		if ex == 'IntegrityError':
+			return str('Verifique os dados inseridos')
+		elif ex == 'DataError':
+			return str('Tem de preencher todos os campos')
+		else:
+			return str(e)
 	finally:
 		dbConn.commit()
 		cursor.close()
@@ -355,9 +460,20 @@ def venda():
 			data = (request.form["num_venda"], request.form["substancia"], request.form["quant"], request.form["preco"], request.form["inst"])
 			cursor.execute(query, data)
 
-		return render_template('venda.html')
+		query = "SELECT nome FROM instituicao WHERE tipo = 'farmacia' ORDER BY nome;"
+		cursor.execute(query)
+		instituicoes = cursor.fetchall()
+		
+		return render_template('venda.html', instituicoes=instituicoes)
 	except Exception as e:
-		return str(e)
+		ex = str(type(e).__name__)
+
+		if ex == 'IntegrityError':
+			return str('Verifique os dados inseridos')
+		elif ex == 'DataError':
+			return str('Tem de preencher todos os campos')
+		else:
+			return str(e)
 	finally:
 		dbConn.commit()
 		cursor.close()
@@ -371,12 +487,19 @@ def venda_prescricao():
 		dbConn = psycopg2.connect(DB_CONNECTION_STRING)
 		cursor = dbConn.cursor(cursor_factory = psycopg2.extras.DictCursor)
 
-		query = "SELECT * FROM prescricao;"
+		query = "SELECT * FROM prescricao p LEFT JOIN prescricao_venda v ON p.num_cedula=v.num_cedula AND p.num_doente = v.num_doente AND p.data_consulta = v.data_consulta WHERE v.num_cedula IS NULL and v.num_doente IS NULL AND v.data_consulta IS NULL;"
 		cursor.execute(query)
 		
 		return render_template('venda_prescricao.html', cursor=cursor)
 	except Exception as e:
-		return str(e)
+		ex = str(type(e).__name__)
+
+		if ex == 'IntegrityError':
+			return str('Verifique os dados inseridos')
+		elif ex == 'DataError':
+			return str('Tem de preencher todos os campos')
+		else:
+			return str(e)
 	finally:
 		cursor.close()
 		dbConn.close()
@@ -401,13 +524,24 @@ def venda_prescricao_form():
 			
 			return redirect('venda_prescricao')
 		else:
+			query = "SELECT nome FROM instituicao WHERE tipo = 'farmacia' ORDER BY nome;"
+			cursor.execute(query)
+			instituicoes = cursor.fetchall()
+			
 			query = "SELECT num_cedula, num_doente, data_consulta, substancia, quant FROM prescricao WHERE num_cedula = %s AND num_doente = %s AND data_consulta = %s AND substancia = %s;"
 			data = (request.args.get("num_cedula"), request.args.get("num_doente"), request.args.get("data_consulta"), request.args.get("substancia"))
 			cursor.execute(query, data)
 
-			return render_template('venda_prescricao_form.html', cursor = cursor)
+			return render_template('venda_prescricao_form.html', cursor = cursor, instituicoes = instituicoes)
 	except Exception as e:
-		return str(e)
+		ex = str(type(e).__name__)
+
+		if ex == 'IntegrityError':
+			return str('Verifique os dados inseridos')
+		elif ex == 'DataError':
+			return str('Tem de preencher todos os campos')
+		else:
+			return str(e)
 	finally:
 		dbConn.commit()
 		cursor.close()
@@ -423,7 +557,7 @@ def listar_substancias():
 		cursor = dbConn.cursor(cursor_factory = psycopg2.extras.DictCursor)
 
 		if request.method == 'POST':
-			query = "SELECT m.nome, substancia, EXTRACT(MONTH FROM p.data_consulta), EXTRACT(YEAR FROM p.data_consulta) FROM medico m NATURAL JOIN prescricao p WHERE num_cedula = %s AND EXTRACT(MONTH FROM p.data_consulta) = %s AND EXTRACT(YEAR FROM p.data_consulta) = %s;"
+			query = "SELECT DISTINCT substancia FROM medico m NATURAL JOIN prescricao p WHERE num_cedula = %s AND EXTRACT(MONTH FROM p.data_consulta) = %s AND EXTRACT(YEAR FROM p.data_consulta) = %s;"
 			data = (request.form['medico'], request.form['mes'], request.form['ano'])
 			cursor.execute(query, data)
 
@@ -432,7 +566,14 @@ def listar_substancias():
 		return render_template('listar_substancias.html', cursor = None)
 
 	except Exception as e:
-		return str(e)
+		ex = str(type(e).__name__)
+
+		if ex == 'IntegrityError':
+			return str('Verifique os dados inseridos')
+		elif ex == 'DataError':
+			return str('Tem de preencher todos os campos')
+		else:
+			return str(e)
 	finally:
 		cursor.close()
 		dbConn.close()
@@ -455,7 +596,14 @@ def listar_glicemia():
 
 		return render_template('listar_glicemia.html', max=glicemia_max, min=glicemia_min)
 	except Exception as e:
-		return str(e)
+		ex = str(type(e).__name__)
+
+		if ex == 'IntegrityError':
+			return str('Verifique os dados inseridos')
+		elif ex == 'DataError':
+			return str('Tem de preencher todos os campos')
+		else:
+			return str(e)
 	finally:
 		cursor.close()
 		dbConn.close()

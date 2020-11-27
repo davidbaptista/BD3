@@ -14,9 +14,16 @@
 	</head>
 	<body>
         <form method="POST" action="prescricoes">
-            <input type="text" id="num_cedula" name="num_cedula" placeholder="Número de Cédula"/><br>
-            <input type="text" id="num_doente" name="num_doente" placeholder="Número de Doente"/><br>
-			<input type="text" id="data_consulta" name="data_consulta" placeholder="Data da Consulta"/><br>
+			{% if consultas %}
+			<label for="consulta">Consulta:</consulta>
+			<select name="consulta" id="consulta">
+				<option value="__" selected="selected">Sem consulta</option>
+				{% for consulta in consultas %}
+					<option value="{{ consulta[0] }}_{{ consulta[1] }}_{{ consulta[2]}}">Medico: {{consulta[0]}} Doente: {{consulta[1]}} Data: {{consulta[2]}}</option>
+				{% endfor %}
+			</select>
+			{% endif %}
+			<br>
             <input type="text" id="substancia" name="substancia" placeholder="Substância"/><br>
             <input type="text" id="quant" name="quant" placeholder="Quantidade"/><br>
             <input type="submit" value="Adicionar"/>

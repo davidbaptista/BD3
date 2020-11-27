@@ -17,8 +17,7 @@
 			{% for record in cursor %}
 				<h1>Editar Instituição {{ record[0] }}</h1>
 				<form method="POST" action="editar_instituicao">
-					<input type="hidden" id="nome_old" name="nome_old" value="{{ record[0] }}"/><br>
-					<input type="text" id="nome" name="nome" value="{{ record[0] }}"/><br>
+					<input type="hidden" id="nome" name="nome" value="{{ record[0] }}"/><br>
 					<select name="tipo" id="tipo">
 						{% if record[1] == 'farmacia' %}
 							<option value="farmacia" selected="selected">Farmácia</option>

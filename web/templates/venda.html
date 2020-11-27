@@ -18,7 +18,16 @@
 			<input type="text" id="substancia" name="substancia" placeholder="Substância"/><br>
 			<input type="text" id="quant" name="quant" placeholder="Quantidade"/><br>
 			<input type="text" id="preco" name="preco" placeholder="Preço"/><br>	
-			<input type="text" id="inst" name="inst" placeholder="Nome da farmácia"/><br>
+
+			{% if instituicoes %}
+			<label for="inst">Instituição:</label>
+			<select name="inst" id="inst">
+				{% for instituicao in instituicoes %}
+					<option value="{{ instituicao[0] }}">{{instituicao[0]}}</option>
+				{% endfor %}
+			</select>
+			{% endif %}
+			<br>
             <input type="submit" value="Adicionar"/>
 		</form>
 	  <br>

@@ -17,7 +17,7 @@
 		{% for record in cursor %}
 			<h1>Editar médico {{ record[0] }}</h1>
 			<form method="POST" action="editar_medico">
-				<input type="hidden" type="text" id="num_cedula" name="num_cedula" value="{{ record[0] }}"/><br>
+				<input type="hidden" id="num_cedula" name="num_cedula" value="{{ record[0] }}"/><br>
 				<input type="text" id="nome" name="nome" value="{{ record[1] }}"/><br>
 				<input type="text" id="especialidade" name="especialidade" value="{{ record[2] }}"/><br>
 				<input type="submit" value="Editar"/>

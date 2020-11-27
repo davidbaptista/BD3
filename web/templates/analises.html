@@ -18,7 +18,7 @@
 			<input type="text" id="especialidade" name="especialidade" placeholder="Especialidade"/><br>
 			{% if consultas %}
 			<label for="consulta">Consulta:</consulta>
-			<select name="consulta" id="num_regiao_concelho">
+			<select name="consulta" id="consulta">
 				<option value="__" selected="selected">Sem consulta</option>
 				{% for consulta in consultas %}
 					<option value="{{ consulta[0] }}_{{ consulta[1] }}_{{ consulta[2]}}">Medico: {{consulta[0]}} Doente: {{consulta[1]}} Data: {{consulta[2]}}</option>
@@ -29,7 +29,7 @@
 			<input type="text" id="nome" name="nome" placeholder="Nome"/><br>
 			<input type="text" id="quant" name="quant" placeholder="Quantidade"/><br>
 			{% if instituicoes %}
-				<label for="inst">Consulta:</consulta>
+				<label for="inst">Instituição:</consulta>
 				<select name="inst" id="inst">
 					{% for instituicao in instituicoes %}
 						<option value="{{ instituicao[0] }}">{{instituicao[0]}}</option>

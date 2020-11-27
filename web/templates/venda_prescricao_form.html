@@ -23,7 +23,16 @@
 				<input type="hidden" id="substancia" name="substancia" value="{{ record[3] }}"/><br>
 				<input type="hidden" id="quant" name="quant" value="{{record[4]}}"/><br>
 				<input type="text" id="num_venda" name="num_venda" placeholder="Número da venda"/><br>
-				<input type="text" id="inst" name="inst" placeholder="Instituição"/><br>
+
+				{% if instituicoes %}
+					<label for="inst">Instituição:</label>
+					<select name="inst" id="inst">
+						{% for instituicao in instituicoes %}
+							<option value="{{ instituicao[0] }}">{{instituicao[0]}}</option>
+						{% endfor %}
+					</select>
+				{% endif %}
+				<br>
 				<input type="text" id="preco" name="preco" placeholder="Preço"/><br>
 				<input type="submit" value="Adicionar"/>
 			</form>
