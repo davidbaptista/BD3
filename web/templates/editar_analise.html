@@ -20,7 +20,7 @@
 				<input type="hidden" id="num_analise" name="num_analise" value="{{record[0]}}"/><br>
 				<input type="text" id="especialidade" name="especialidade" value="{{record[1]}}"/><br>
 				{% if consultas %}
-					<label for="consulta">Consulta:</consulta>
+					<label for="consulta">Consulta:</label>
 					<select name="consulta" id="consulta">
 						<option value="__" selected="selected">Sem consulta</option>
 						{% for consulta in consultas %}
@@ -37,7 +37,7 @@
 				<input type="text" id="quant" name="quant" value="{{record[7]}}"/><br>
 
 				{% if instituicoes %}
-				<label for="inst">Instituição:</consulta>
+				<label for="inst">Instituição:</label>
 				<select name="inst" id="inst">
 					{% for instituicao in instituicoes %}
 						{% if instituicao[0] == record[8] %}
